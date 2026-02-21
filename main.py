@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, date
 import streamlit as st
 import requests
 import os
@@ -14,6 +14,10 @@ def generate_pic(selected_date):
         "api_key": api_key,
         "date": selected_date.strftime("%Y-%m-%d")
     }
+
+    if selected_date > date.today():
+        st.error("Even NASA can't see the future. Please select an earlier day.")
+        return
 
     response = requests.get(base_url, params=params)
     print(response.status_code)
