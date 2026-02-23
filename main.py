@@ -1,46 +1,44 @@
 from dotenv import load_dotenv
-from datetime import datetime, date
 import streamlit as st
+from datetime import date
 import requests
 import os
 
 load_dotenv()
+
 api_key = os.getenv("API_KEY")
-base_url = os.getenv("URL").replace("DEMO_KEY", api_key)
+url = os.getenv("URL").replace("DEMO_KEY", api_key)
+
+print(api_key)
+print(url)
 
 
-def generate_pic(selected_date):
+def generate_pic(user_date, url):
     params = {
         "api_key": api_key,
-        "date": selected_date.strftime("%Y-%m-%d")
+        "date": user_date
     }
 
-    if selected_date > date.today():
-        st.error("Even NASA can't see the future. Please select an earlier day.")
+    if user_date > date.today():
+        st.error("Even NASA can't see the future. PLease select an earlier date")
         return
 
-    response = requests.get(base_url, params=params)
-    print(response.status_code)
+    respone = requests.get(url, params=params)
 
-    if response.status_code == 200:
-        data = response.json()
+    if respone.status_code == 200:
+        image_url = respone.json()["hdurl"]
+        text_section = respone.json()["explanation"]
+        author = respone.json()["copyright"]
 
-        st.header(data.get('title', 'Astronomy Picture'))
-        img_url = data.get('hdurl', data.get('url'))
-
-        if data.get("media_type") == "image":
-            st.image(img_url)
-        else:
-            st.video(img_url)
-
-        st.write(data.get('explanation'))
+        st.image(image_url)
+        st.title(author)
+        st.text(text_section)
 
     else:
-        st.error(f"Error {response.status_code}: Could not fetch data.")
+        st.error("Server errror, please come back later ❌❌")
+
+    print(date.today())
 
 
-st.subheader('Picture of the day')
-user_date = st.date_input(label="🚀🧑‍🚀")
-
-if user_date:
-    generate_pic(user_date)
+user_date = st.date_input(label="Select a date! 🚀🧑‍🚀")
+generate_pic(user_date=user_date, url=url)
