@@ -9,9 +9,6 @@ load_dotenv()
 api_key = os.getenv("API_KEY")
 url = os.getenv("URL").replace("DEMO_KEY", api_key)
 
-print(api_key)
-print(url)
-
 
 def generate_pic(user_date, url):
     params = {
