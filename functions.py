@@ -1,30 +1,33 @@
-from dotenv import load_dotenv
 import requests
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
-api_key = os.getenv("API_KEY")
-api_url = os.getenv("API_URL").replace("DEMO_KEY", api_key)
 
+def get_picture_details(date):
+    response = requests.get(
+        url=os.getenv("URL"),
+        params={
+            'api_key': os.getenv("API_KEY"),
+            'date': date
+        },
+        timeout=30
+    )
 
-def get_picture_details(date=None):
-    if date:
-        response = requests.get(f"{api_url}&date={date}")
-    else:
-        response = requests.get(api_url)
+    print("Status:", response.status_code)
+
+    response.raise_for_status()
 
     data = response.json()
 
-    print(data)
-
     return {
+        "date": data.get("date"),
+        "copyright": data.get("copyright"),
         "explanation": data.get("explanation"),
-        "url": data.get("hdurl"),
-        "author": data.get("copyright"),
+        "url": data.get("url"),
+        "title": data.get("title"),
         "media_type": data.get("media_type")
     }
 
-
-if __name__ == '__main__':
-    print(f"API URL: {api_url}")
-    print(get_picture_details())
+if __name__ == "__main__":
+    print(get_picture_details('2026-05-12'))
