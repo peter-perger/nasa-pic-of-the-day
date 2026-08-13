@@ -1,16 +1,13 @@
 from functions import get_picture_details
 from dotenv import load_dotenv
-from datetime import date, dt_date
+from datetime import date as dt_date
 import streamlit as st
-import os
 
 st.set_page_config(page_title="Nasa Picture of the Day", page_icon="🚀")
 st.title("NASA Picture Of The Day")
 
 selected_date = st.date_input(label = "Please select a date! 🕰️", max_value=dt_date.today())
 formatted_date = selected_date.strftime("%Y-%m-%d")
-
-print(formatted_date)
 
 picture_details = get_picture_details(date=formatted_date)
 

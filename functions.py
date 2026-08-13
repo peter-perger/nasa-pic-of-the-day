@@ -5,12 +5,14 @@ import os
 load_dotenv()
 
 def get_picture_details(date):
-    response = requests.get(
-        url=os.getenv("URL"),
-        params={
+    params = {
             'api_key': os.getenv("API_KEY"),
             'date': date
         },
+
+    response = requests.get(
+        url=os.getenv("URL"),
+        params=params,
         timeout=30
     )
 
