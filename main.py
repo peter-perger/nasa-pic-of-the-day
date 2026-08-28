@@ -1,5 +1,4 @@
 from functions import get_picture_details
-from dotenv import load_dotenv
 from datetime import date as dt_date
 import streamlit as st
 

@@ -6,9 +6,11 @@ load_dotenv()
 
 def get_picture_details(date):
     params = {
-            'api_key': os.getenv("API_KEY"),
-            'date': date
-        },
+            'api_key': os.getenv("API_KEY")
+        }
+
+    if date:
+        params["date"] = date
 
     response = requests.get(
         url=os.getenv("URL"),
